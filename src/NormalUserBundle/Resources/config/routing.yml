@@ -1,3 +1,11 @@
 normal_user_homepage:
     path:     /
     defaults: { _controller: NormalUserBundle:Default:index }
+
+ticketEkle:
+    path:     /ticketEkle
+    defaults: { _controller: NormalUserBundle:Ticket:index }
+
+ajax_ticketEkle :
+    path:     /ajax-ticketEkle
+    defaults: { _controller: NormalUserBundle:Ticket:ekle }
