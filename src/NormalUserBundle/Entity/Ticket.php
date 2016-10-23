@@ -35,12 +35,7 @@ class Ticket
      */
     private $metin;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="kategori", type="string", length=255)
-     */
-    private $kategori;
+
 
     /**
      * @var string
@@ -56,6 +51,41 @@ class Ticket
      */
     private $dosya;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="\UserBundle\Entity\User", inversedBy="ticket")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    private $user;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $tarih;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="\AdminBundle\Entity\KategoriTicket", mappedBy="ticket")
+     */
+    private $kategoriticket;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="durum", type="string", length=255)
+     */
+    private $durum;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="\AdminBundle\Entity\Yetkiler", mappedBy="ticket")
+     */
+    private $yetki;
+
+    /**
+     * @ORM\OneToMany(targetEntity="\AdminBundle\Entity\Cevaplar", mappedBy="ticket")
+     */
+    private $cevaplar;
 
     /**
      * Get id
@@ -115,29 +145,7 @@ class Ticket
         return $this->metin;
     }
 
-    /**
-     * Set kategori
-     *
-     * @param string $kategori
-     *
-     * @return Ticket
-     */
-    public function setKategori($kategori)
-    {
-        $this->kategori = $kategori;
 
-        return $this;
-    }
-
-    /**
-     * Get kategori
-     *
-     * @return string
-     */
-    public function getKategori()
-    {
-        return $this->kategori;
-    }
 
     /**
      * Set onemDerecesi
@@ -186,5 +194,175 @@ class Ticket
     {
         return $this->dosya;
     }
+
+
+
+    /**
+     * Set user
+     *
+     * @param \UserBundle\Entity\User $user
+     * @return Ticket
+     */
+    public function setUser(\UserBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+        return $this;
+    }
+    /**
+     * Get user
+     *
+     * @return \UserBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+
+    /**
+     * Set tarih
+     *
+     * @param \DateTime $tarih
+     * @return Ticket
+     */
+    public function setTarih($tarih)
+    {
+        $this->tarih = $tarih;
+        return $this;
+    }
+    /**
+     * Get tarih
+     *
+     * @return \DateTime
+     */
+    public function getTarih()
+    {
+        return $this->tarih;
+    }
+
+
+
+
+
+    /**
+     * Add kategoriticket
+     *
+     * @param \AdminBundle\Entity\KategoriTicket $kategoriticket
+     * @return Ticket
+     */
+    public function addKategoriticket(\AdminBundle\Entity\KategoriTicket $kategoriticket)
+    {
+        $this->kategoriticket[] = $kategoriticket;
+        return $this;
+    }
+    /**
+     * Remove kategoriticket
+     *
+     * @param \AdminBundle\Entity\KategoriTicket $kategoriticket
+     */
+    public function removeKategoriticket(\AdminBundle\Entity\KategoriTicket $kategoriticket)
+    {
+        $this->kategoriticket->removeElement($kategoriticket);
+    }
+    /**
+     * Get kategoriticket
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getKategoriticket()
+    {
+        return $this->kategoriticket;
+    }
+
+
+    /**
+     * Set durum
+     *
+     * @param string $durum
+     *
+     * @return Ticket
+     */
+    public function setDurum($durum)
+    {
+        $this->durum = $durum;
+
+        return $this;
+    }
+
+    /**
+     * Get durum
+     *
+     * @return string
+     */
+    public function getDurum()
+    {
+        return $this->durum;
+    }
+
+
+
+
+    /**
+     * Add yetki
+     *
+     * @param \AdminBundle\Entity\Yetkiler $yetki
+     * @return Ticket
+     */
+    public function addYetki(\AdminBundle\Entity\Yetkiler $yetki)
+    {
+        $this->yetki[] = $yetki;
+        return $this;
+    }
+    /**
+     * Remove yetki
+     *
+     * @param \AdminBundle\Entity\Yetkiler $yetki
+     */
+    public function removeYetki(\AdminBundle\Entity\Yetkiler $yetki)
+    {
+        $this->yetki->removeElement($yetki);
+    }
+    /**
+     * Get yetki
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getYetki()
+    {
+        return $this->yetki;
+    }
+
+
+    /**
+     * Add cevaplar
+     *
+     * @param \AdminBundle\Entity\Cevaplar $cevaplar
+     * @return Ticket
+     */
+    public function addTicket(\AdminBundle\Entity\Cevaplar $cevaplar)
+    {
+        $this->cevaplar[] = $cevaplar;
+        return $this;
+    }
+    /**
+     * Remove cevaplar
+     *
+     * @param \AdminBundle\Entity\Cevaplar $cevaplar
+     */
+    public function removeCevaplar(\AdminBundle\Entity\Cevaplar $cevaplar)
+    {
+        $this->cevaplar->removeElement($cevaplar);
+    }
+    /**
+     * Get cevaplar
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCevaplar()
+    {
+        return $this->cevaplar;
+    }
+
+
 }
 

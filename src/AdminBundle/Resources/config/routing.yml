@@ -1,3 +1,41 @@
 admin_homepage:
     path:     /
     defaults: { _controller: AdminBundle:Default:index }
+
+ticketListele:
+    path:     /ticketListele
+    defaults: { _controller: AdminBundle:AdminTicket:index }
+
+kategori:
+    path:     /kategori
+    defaults: { _controller: AdminBundle:AdminTicket:kategori }
+
+
+ajax_kategoriEkle:
+    path:     /ajax-kategoriEkle
+    defaults: { _controller: AdminBundle:AdminTicket:kategoriEkle }
+
+ajax_coz:
+    path:     /ajax-coz
+    defaults: { _controller: AdminBundle:AdminTicket:coz }
+
+ajax_yetkili:
+    path:     /ajax-yetkili
+    defaults: { _controller: AdminBundle:AdminTicket:yetkiliSec }
+
+ajax_myModaldoldur:
+    path:     /ajax-myModaldoldur
+    defaults: { _controller: AdminBundle:AdminTicket:myModalDoldur }
+
+ajax_ticketCevaplaModal:
+    path:     /ajax_ticketCevaplaModal
+    defaults: { _controller: AdminBundle:AdminTicket:ticketCevaplaModal }
+
+ajax_ticketCevapla:
+    path:     /ajax_ticketCevapla
+    defaults: { _controller: AdminBundle:AdminTicket:ticketCevapla}
+
+ajax_ticketCevapGor:
+    path:     /ajax_ticketCevapGor
+    defaults: { _controller: AdminBundle:AdminTicket:ticketCevapGor}
+

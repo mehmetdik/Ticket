@@ -2,6 +2,7 @@
 
 namespace NormalUserBundle\Controller;
 
+use AdminBundle\Entity\KategoriTicket;
 use NormalUserBundle\Entity\Ticket;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +15,10 @@ class TicketController extends Controller
 {
     public function indexAction()
     {
-        return $this->render('NormalUserBundle:MainPage:index.html.twig');
+        $em=$this->getDoctrine()->getManager();
+
+        $kategoriler=$em->getRepository('AdminBundle:Kategori')->findAll();
+        return $this->render('NormalUserBundle:MainPage:index.html.twig',array('kategoriler'=>$kategoriler));
     }
     public function ekleAction(Request $request)
     {
@@ -22,18 +26,39 @@ class TicketController extends Controller
 
         $baslik=$request->request->get('baslik');
         $metin=$request->request->get('metin');
-        $kategori=$request->request->get('kategori');
+        $kategoriobj=$request->request->get('kategori');
         $onem=$request->request->get('onem');
         $dosya=$request->request->get('dosya');
 
+        $dilimler = explode(",", $kategoriobj);
+
+
+
+        $user=$this->getUser();
+        $tarih=new \DateTime("now");
+
+
         $ticket=new Ticket();
+        $ticket->setUser($user);
         $ticket->setBaslik($baslik);
         $ticket->setMetin($metin);
-        $ticket->setKategori($kategori);
+        $ticket->setDurum("0");
         $ticket->setOnemDerecesi($onem);
         $ticket->setDosya($dosya);
+        $ticket->setTarih($tarih);
 
         $em->persist($ticket);
+
+        foreach($dilimler as $dilim)
+        {
+            $kategori=$em->getRepository('AdminBundle:Kategori')->find($dilim);
+            $kategoriticket=new KategoriTicket();
+            $kategoriticket->setKategori($kategori);
+            $kategoriticket->setTicket($ticket);
+            $em->persist($kategoriticket);
+
+        }
+
         $em->flush();
 
      //   $tickets=$em->getRepository('NormalUserBundle:Ticket')->findAll();

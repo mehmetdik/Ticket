@@ -1,0 +1,20 @@
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" aria-hidden="true" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Yetkili Ata</h4>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <select class="form-control select2" id="yetkiliSecim" style="width: 100%;">
+                    {% for kullanici in Kullanicilar %}
+                        <option value="{{ kullanici.id }}">{{ kullanici.username|default('-') }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" onclick="yetkiliKaydet({{ Ticket.id }});" class="btn btn-primary">Kaydet</button>
+        </div>
+    </div>
+</div>

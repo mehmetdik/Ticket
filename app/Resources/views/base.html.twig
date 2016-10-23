@@ -27,12 +27,36 @@ scratch. This page gets rid of all links and provides the needed markup only.
         -->
         <link rel="stylesheet" href="{{ asset('AdminLTE/dist/css/skins/skin-blue.min.css') }}">
 
+        <link rel="stylesheet" href="{{ asset('AdminLTE/plugins/select2/select2.min.css') }}">
+
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
+
+        <!-- DataTables -->
+        <link rel="stylesheet" href="{{ asset('AdminLTE/plugins/datatables/dataTables.bootstrap.css') }}">
+
+        <link rel="stylesheet" href="{{ asset('AdminLTE/dist/css/skins/_all-skins.min.css') }}">
+
+
+        <style>
+            .example-modal .modal {
+                position: relative;
+                top: auto;
+                bottom: auto;
+                right: auto;
+                left: auto;
+                display: block;
+                z-index: 1;
+            }
+
+            .example-modal .modal {
+                background: transparent !important;
+            }
+        </style>
 
 
     {% endblock %}
@@ -99,12 +123,18 @@ desired effect
             <ul class="sidebar-menu">
                 <li class="header">HEADER</li>
                 <!-- Optionally, you can add icons to the links -->
-                <li class="active"><a href="{{ path('ticketEkle') }}"><i class="fa fa-link"></i> <span>Ticket Ekle</span></a></li>
-                <li><a href="#"><i class="fa fa-link"></i> <span>Another Link</span></a></li>
+                <li class="{% if app.request.attributes.get('_route') == 'ticketEkle' %}active open{% endif %}"><a href="{{ path('ticketEkle') }}"><i class="fa fa-link"></i> <span>Ticket Ekle</span></a></li>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li class="{% if app.request.attributes.get('_route') == 'ticketListele' %}active open{% endif %}"><a href="{{ path('ticketListele') }}"><i class="fa fa-link"></i> <span>Ticket Listele</span></a></li>
+                    <li class="{% if app.request.attributes.get('_route') == 'kategori' %}active open{% endif %}"><a href="{{ path('kategori') }}"><i class="fa fa-link"></i> <span>Kategori Ekle</span></a></li>
+
+                {% endif %}
+            {#
                 <li class="treeview">
                     <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>
                         <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
+
             </span>
                     </a>
                     <ul class="treeview-menu">
@@ -112,6 +142,7 @@ desired effect
                         <li><a href="#">Link in level 2</a></li>
                     </ul>
                 </li>
+                #}
             </ul>
             <!-- /.sidebar-menu -->
         </section>
@@ -248,6 +279,29 @@ desired effect
     <script src="{{ asset('AdminLTE/bootstrap/js/bootstrap.min.js') }}"></script>
     <!-- AdminLTE App -->
     <script src="{{ asset('AdminLTE/dist/js/app.min.js') }}"></script>
+
+    <script src="{{ asset('AdminLTE/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('AdminLTE/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ asset('AdminLTE/plugins/select2/select2.full.min.js') }}"></script>
+
+
+    <script>
+        $(function () {
+
+            $(".select2").select2();
+
+
+            $("#example1").DataTable();
+            $('#example2').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false
+            });
+        });
+    </script>
 {% endblock %}
 
 

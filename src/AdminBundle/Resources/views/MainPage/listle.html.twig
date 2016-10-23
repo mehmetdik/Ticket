@@ -1,0 +1,199 @@
+{% extends "base.html.twig" %}
+{% block body %}
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Data Table With Full Features</h3>
+        </div>
+        <!-- /.box-header -->
+        <div   class="box-body">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th>Sahib</th>
+                    <th>Başlık</th>
+                    <th>Kategori</th>
+                    <th>Önem Derecesi</th>
+                    <th>Eklenme Tarihi</th>
+                    <th>Yetkili</th>
+                    <th>Durum</th>
+                    <th></th>
+
+
+                </tr>
+                </thead>
+                <tbody id="listTickets">
+                        {% set count=0 %}
+                        {% for Ticket in Tickets %}
+
+                            <tr>
+                                <td>{{ Ticket.user.username|default('') }}</td>
+                                <td>{{ Ticket.baslik|default('') }}</td>
+                                <td>{% for KategoriTicket in KategoriTickets %}{% if Ticket.id|default('')== KategoriTicket.ticket.id|default('')  %}{{ KategoriTicket.kategori.kategori|default }}  {% endif %}{% endfor %}</td>
+                                <td>{{ Ticket.onemDerecesi|default('') }}</td>
+                                <td>{{ Ticket.tarih|date('d-m-Y')|default('') }}</td>
+                                <td>{% for Yetki in Yetkiler %}{% if Ticket.id|default('')== Yetki.ticket.id|default('')  %}{{ Yetki.user.username|default }}  {% endif %}{% endfor %}</td>
+                                <td>
+                                            <!-- The time line -->
+                                    {% if Ticket.durum|default('')=="0" %}
+                                         <a class="btn btn-danger btn-xs">Çözülmedi</a>
+                                    {% elseif Ticket.durum|default('')=="1" %}
+                                        <a class="btn btn-info btn-xs">Beklemede</a>
+                                    {% elseif Ticket.durum|default('')=="2" %}
+                                        <a class="btn btn-success btn-xs">Çözüldü</a>
+                                    {% endif %}
+
+                                    <!-- /.col -->
+                                </td>
+                                <td>
+                                    {% if Ticket.durum|default('')=="0" %}
+                                        <a href="#" style="margin-left: 5px;"   role="button" onclick="coz({{ Ticket.id }});" title="Çöz" class="btn btn-xs btn-success" ><i class="fa fa-play"></i></a>
+
+
+                                        <a href="#myModal" data-toggle="modal"  style="margin-left: 5px;"   role="button" onclick="myModaldoldur({{ Ticket.id }});" title="Yetkili Ata" class="btn btn-xs btn-primary" ><i class="fa fa-users"></i></a>
+
+                                    {% endif %}
+                                    {% for Cevap in Cevaplar %}
+                                        {% if Cevap.ticket.id == Ticket.id %}
+                                           {% set count=count+1 %}
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    {% if count == 0 %}
+                                        <a href="#ticketCevaplaModal" data-toggle="modal"  style="margin-left: 5px;"   role="button" onclick="ticketCevaplaModal({{ Ticket.id }});" title="Cevapla" class="btn btn-xs btn-warning" ><i class="fa fa-envelope"></i></a>
+                                    {% else %}
+                                        <a href="#ticketCevapGor" data-toggle="modal"  style="margin-left: 5px;"   role="button" onclick="ticketCevapGor({{ Ticket.id }});" title="Cevabı Gör" class="btn btn-xs btn-default" ><i class="fa fa-envelope"></i></a>
+                                    {% endif %}
+
+
+                                </td>
+                            </tr>
+                            {% set count=0 %}
+                        {% endfor %}
+
+
+
+                </tbody>
+
+
+            </table>
+        </div>
+        <!-- /.box-body -->
+    </div>
+
+
+
+    <!-- Button trigger modal -->
+
+
+    <!-- Modal -->
+    <div class="modal fade"  id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+
+    </div>
+
+
+
+    <div class="modal fade"  id="ticketCevaplaModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+
+    </div>
+
+
+    <div class="modal fade"  id="ticketCevapGor" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+
+    </div>
+
+
+
+
+<script>
+    function coz(ticketid)
+    {
+
+        $.ajax({
+            url: "{{ path('ajax_coz') }}",
+            type: "POST",
+            data: 'ticketid='+ticketid,
+            success: function(e){
+
+                alert("Çözüldü");
+                $('#listTickets').html(e);
+            }
+        });
+    }
+
+
+    function yetkiliKaydet(ticketid) {
+
+        var yetkiliSecim = $('#yetkiliSecim').val();
+
+        $.ajax({
+            url: "{{ path('ajax_yetkili') }}",
+            type: "POST",
+            data: 'yetkiliSecim='+yetkiliSecim+'&ticketid='+ticketid,
+            success: function(e){
+
+                alert("Yetkili Atandı");
+                $('#listTickets').html(e);
+            }
+        });
+    }
+
+    function myModaldoldur(ticketid) {
+        $.ajax({
+            url: "{{ path('ajax_myModaldoldur') }}",
+            type: "POST",
+            data: 'ticketid='+ticketid,
+            success: function(e){
+                $('#myModal').html(e);
+
+            }
+        });
+    }
+
+
+
+    function ticketCevaplaModal(ticketid) {
+        $.ajax({
+            url: "{{ path('ajax_ticketCevaplaModal') }}",
+            type: "POST",
+            data: 'ticketid='+ticketid,
+            success: function(e){
+                $('#ticketCevaplaModal').html(e);
+
+            }
+        });
+    }
+
+
+    function ticketCevapla(ticketid) {
+        var cevap = $('#cevap').val();
+        $.ajax({
+            url: "{{ path('ajax_ticketCevapla') }}",
+            type: "POST",
+            data: 'ticketid='+ticketid+'&cevap='+cevap,
+            success: function(e){
+                alert("Ticket Cevaplandı");
+                $('#listTickets').html(e);
+
+            }
+        });
+    }
+
+
+    function ticketCevapGor(ticketid) {
+        $.ajax({
+            url: "{{ path('ajax_ticketCevapGor') }}",
+            type: "POST",
+            data: 'ticketid='+ticketid,
+            success: function(e){
+                $('#ticketCevapGor').html(e);
+
+            }
+        });
+    }
+
+
+
+</script>
+
+
+{% endblock %}
