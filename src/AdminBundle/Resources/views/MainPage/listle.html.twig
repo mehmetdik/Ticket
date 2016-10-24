@@ -28,7 +28,7 @@
                             <tr>
                                 <td>{{ Ticket.user.username|default('') }}</td>
                                 <td>{{ Ticket.baslik|default('') }}</td>
-                                <td>{% for KategoriTicket in KategoriTickets %}{% if Ticket.id|default('')== KategoriTicket.ticket.id|default('')  %}{{ KategoriTicket.kategori.kategori|default }}  {% endif %}{% endfor %}</td>
+                                <td>{% for KategoriTicket in KategoriTickets %}{% if Ticket.id|default('')== KategoriTicket.ticket.id|default('')  %}{{ KategoriTicket.kategori.kategori|default('') }}  {% endif %}{% endfor %}</td>
                                 <td>{{ Ticket.onemDerecesi|default('') }}</td>
                                 <td>{{ Ticket.tarih|date('d-m-Y')|default('') }}</td>
                                 <td>{% for Yetki in Yetkiler %}{% if Ticket.id|default('')== Yetki.ticket.id|default('')  %}{{ Yetki.user.username|default }}  {% endif %}{% endfor %}</td>
@@ -177,6 +177,8 @@
             }
         });
     }
+
+   
 
 
     function ticketCevapGor(ticketid) {

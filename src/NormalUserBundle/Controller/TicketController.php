@@ -18,7 +18,7 @@ class TicketController extends Controller
         $em=$this->getDoctrine()->getManager();
 
         $kategoriler=$em->getRepository('AdminBundle:Kategori')->findAll();
-        return $this->render('NormalUserBundle:MainPage:index.html.twig',array('kategoriler'=>$kategoriler));
+        return $this->render('NormalUserBundle:MainPage/Ticket:index.html.twig',array('kategoriler'=>$kategoriler));
     }
     public function ekleAction(Request $request)
     {
@@ -67,6 +67,59 @@ class TicketController extends Controller
        // return $this->render('NormalUserBundle:MainPage/Ticket:index.html.twig',array('tickets'=>$tickets));
 
 
+
+    }
+
+
+    public function cozKabulAction(Request $request)
+    {
+        $em=$this->getDoctrine()->getManager();
+
+        $ticketid=$request->request->get("ticketid");
+
+        $Ticket=$em->getRepository('NormalUserBundle:Ticket')->find($ticketid);
+
+        $Ticket->setDurum('2');
+
+        $em->persist($Ticket);
+        $em->flush();
+
+        $user=$this->getUser();
+
+
+        $Tickets=$em->getRepository('NormalUserBundle:Ticket')->findBy(array('user'=>$user));
+        $kategoriTickets=$em->getRepository('AdminBundle:KategoriTicket')->findAll();
+
+        $yetkiler=$em->getRepository('AdminBundle:Yetkiler')->findAll();
+        $cevaplar=$em->getRepository('AdminBundle:Cevaplar')->findAll();
+
+        return $this->render('NormalUserBundle:MainPage:ajaxlistele.html.twig',array('Tickets'=>$Tickets,'KategoriTickets'=>$kategoriTickets,'Yetkiler'=>$yetkiler,'Cevaplar'=>$cevaplar));
+    }
+
+    public function cozRedAction(Request $request)
+    {
+        $em=$this->getDoctrine()->getManager();
+        $ticketid=$request->request->get("ticketid");
+
+        $Ticket=$em->getRepository('NormalUserBundle:Ticket')->find($ticketid);
+
+        $Ticket->setDurum('0');
+
+        $em->persist($Ticket);
+        $em->flush();
+
+
+        $user=$this->getUser();
+
+
+        $Tickets=$em->getRepository('NormalUserBundle:Ticket')->findBy(array('user'=>$user));
+        $kategoriTickets=$em->getRepository('AdminBundle:KategoriTicket')->findAll();
+
+        $yetkiler=$em->getRepository('AdminBundle:Yetkiler')->findAll();
+        $cevaplar=$em->getRepository('AdminBundle:Cevaplar')->findAll();
+
+
+        return $this->render('NormalUserBundle:MainPage:ajaxlistele.html.twig',array('Tickets'=>$Tickets,'KategoriTickets'=>$kategoriTickets,'Yetkiler'=>$yetkiler,'Cevaplar'=>$cevaplar));
 
     }
 

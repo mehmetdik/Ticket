@@ -123,10 +123,15 @@ desired effect
             <ul class="sidebar-menu">
                 <li class="header">HEADER</li>
                 <!-- Optionally, you can add icons to the links -->
-                <li class="{% if app.request.attributes.get('_route') == 'ticketEkle' %}active open{% endif %}"><a href="{{ path('ticketEkle') }}"><i class="fa fa-link"></i> <span>Ticket Ekle</span></a></li>
+
+
+
                 {% if is_granted('ROLE_ADMIN') %}
                     <li class="{% if app.request.attributes.get('_route') == 'ticketListele' %}active open{% endif %}"><a href="{{ path('ticketListele') }}"><i class="fa fa-link"></i> <span>Ticket Listele</span></a></li>
                     <li class="{% if app.request.attributes.get('_route') == 'kategori' %}active open{% endif %}"><a href="{{ path('kategori') }}"><i class="fa fa-link"></i> <span>Kategori Ekle</span></a></li>
+
+                {% else %}
+                    <li class="{% if app.request.attributes.get('_route') == 'ticketEkle' %}active open{% endif %}"><a href="{{ path('ticketEkle') }}"><i class="fa fa-link"></i> <span>Ticket Ekle</span></a></li>
 
                 {% endif %}
             {#

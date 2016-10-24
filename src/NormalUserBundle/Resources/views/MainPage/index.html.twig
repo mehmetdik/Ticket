@@ -1,101 +1,203 @@
 {% extends "base.html.twig" %}
+{% block  body %}
 
-{% block body %}
-
-
-
+    <!-- Main content -->
     <section class="content">
-        <div class="row">
-            <!-- left column -->
-            <div class="col-md-6">
-                <!-- general form elements -->
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Ticket Ekle</h3>
-                    </div>
-                    <!-- /.box-header -->
-                    <!-- form start -->
-                    <form role="form">
-                        <div class="box-body">
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Başlık</label>
-                                <input type="text" class="form-control" id="baslik" placeholder="Başlık">
-                            </div>
+    <!-- Small boxes (Stat box) -->
+    <div class="row">
+        <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-aqua">
+                <div class="inner">
+                    <h3>{{ counterTicketsUser|default('') }}</h3>
 
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Metin</label><br>
-                                <textarea style="resize: none;" rows="6"  cols="80" id="metin" placeholder="Metni Giriniz..." form="usrform"></textarea>
-                            </div>
-
-
-
-                            <div class="form-group">
-                                <label>Kategori</label>
-                                <select class="form-control select2" multiple="multiple" id="kategori" data-placeholder="Select a State" style="width: 100%;">
-                                    {% for kategori in kategoriler %}
-                                        <option value="{{ kategori.id }}">{{ kategori.kategori|default('') }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Önem Derecesi</label>
-                                <select class="form-control select2" id="onem" style="width: 100%;">
-                                    <option selected="selected">Yüksek</option>
-                                    <option>Orta</option>
-                                    <option>Düşük</option>
-                                </select>
-                            </div>
-
-
-                            <div class="form-group">
-                                <label for="exampleInputFile">Dosya Ekle</label>
-                                <input type="file" id="exampleInputFile">
-
-                                <p class="help-block">Example block-level help text here.</p>
-                            </div>
-
-                        </div>
-                        <!-- /.box-body -->
-
-                        <div class="box-footer">
-                            <button type="submit" onclick="ticketEkle()" class="btn btn-primary">Ekle</button>
-                        </div>
-                    </form>
+                    <p>Toplam Ticket</p>
                 </div>
-
-
-
+                <div class="icon">
+                    <i class="ion ion-bag"></i>
+                </div>
             </div>
-            <!--/.col (left) -->
-            <!-- right column -->
-
-            <!--/.col (right) -->
         </div>
-        <!-- /.row -->
-    </section>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-green">
+                <div class="inner">
+                    <h3>{{ counterAcikUser|default('') }}</h3>
 
+                    <p>Açık Ticket</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-stats-bars"></i>
+                </div>
+            </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-yellow">
+                <div class="inner">
+                    <h3>{{ counterBekleyenUser|default('') }}</h3>
+
+                    <p>Bekleyen Ticket</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-person-add"></i>
+                </div>
+            </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-red">
+                <div class="inner">
+                    <h3>{{ counterCozulmusUser|default('') }}</h3>
+
+                    <p>Kapatılmış Ticket</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-pie-graph"></i>
+                </div>
+            </div>
+        </div>
+        <!-- ./col -->
+    </div>
+    <!-- /.row -->
+    <!-- Main row -->
+
+
+
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Data Table With Full Features</h3>
+        </div>
+        <!-- /.box-header -->
+        <div   class="box-body">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th>Sahib</th>
+                    <th>Başlık</th>
+                    <th>Kategori</th>
+                    <th>Önem Derecesi</th>
+                    <th>Eklenme Tarihi</th>
+                    <th>Yetkili</th>
+                    <th>Durum</th>
+                    <th></th>
+
+
+                </tr>
+                </thead>
+                <tbody id="listTickets">
+                {% set count=0 %}
+                {% for Ticket in Tickets %}
+
+                    <tr>
+                        <td>{{ Ticket.user.username|default('') }}</td>
+                        <td>{{ Ticket.baslik|default('') }}</td>
+                        <td>{% for KategoriTicket in KategoriTickets %}{% if Ticket.id|default('')== KategoriTicket.ticket.id|default('')  %}{{ KategoriTicket.kategori.kategori|default('') }}  {% endif %}{% endfor %}</td>
+                        <td>{{ Ticket.onemDerecesi|default('') }}</td>
+                        <td>{{ Ticket.tarih|date('d-m-Y')|default('') }}</td>
+                        <td>{% for Yetki in Yetkiler %}{% if Ticket.id|default('')== Yetki.ticket.id|default('')  %}{{ Yetki.user.username|default }}  {% endif %}{% endfor %}</td>
+                        <td>
+                            <!-- The time line -->
+                            {% if Ticket.durum|default('')=="0" %}
+                                <a class="btn btn-danger btn-xs">Çözülmedi</a>
+                            {% elseif Ticket.durum|default('')=="1" %}
+                                <a class="btn btn-info btn-xs">Beklemede</a>
+                            {% elseif Ticket.durum|default('')=="2" %}
+                                <a class="btn btn-success btn-xs">Çözüldü</a>
+                            {% endif %}
+
+                            <!-- /.col -->
+                        </td>
+                        <td>
+                            {% if Ticket.durum|default('')=="1" %}
+                                <a href="#" style="margin-left: 5px;"   role="button" onclick="cozKabul({{ Ticket.id }});" title="Çözümü Onayla" class="btn btn-xs btn-success" ><i class="fa fa-play"></i></a>
+
+                                <a href="#" style="margin-left: 5px;"   role="button" onclick="cozReddet({{ Ticket.id }});" title="Çözümü Reddet" class="btn btn-xs btn-danger" ><i class="fa fa-play"></i></a>
+
+                                {#<a href="#myModal" data-toggle="modal"  style="margin-left: 5px;"   role="button" onclick="myModaldoldur({{ Ticket.id }});" title="Yetkili Ata" class="btn btn-xs btn-primary" ><i class="fa fa-users"></i></a>#}
+
+                            {% endif %}
+                            {% for Cevap in Cevaplar %}
+                                {% if Cevap.ticket.id == Ticket.id %}
+                                    {% set count=count+1 %}
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if count == 0 %}
+                              {#<a href="#ticketCevaplaModal" data-toggle="modal"  style="margin-left: 5px;"   role="button" onclick="ticketCevaplaModal({{ Ticket.id }});" title="Cevapla" class="btn btn-xs btn-warning" ><i class="fa fa-envelope"></i></a>#}
+                            {% else %}
+                                <a href="#ticketCevapGor" data-toggle="modal"  style="margin-left: 5px;"   role="button" onclick="ticketCevapGor({{ Ticket.id }});" title="Cevabı Gör" class="btn btn-xs btn-default" ><i class="fa fa-envelope"></i></a>
+                            {% endif %}
+
+
+                        </td>
+                    </tr>
+                    {% set count=0 %}
+                {% endfor %}
+
+
+
+                </tbody>
+
+
+            </table>
+        </div>
+        <!-- /.box-body -->
+    </div>
+
+
+    <div class="modal fade"  id="ticketCevapGor" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+
+    </div>
 
     <script>
-        function ticketEkle()
+        function cozKabul(ticketid)
         {
-            var baslik = $('#baslik').val();
-            var metin = $('#metin').val();
-            var kategori = $('#kategori').val();
-            var onem = $('#onem').val();
-            var dosya = $('#exampleInputFile').val();
 
             $.ajax({
-                url: "{{ path('ajax_ticketEkle') }}",
+                url: "{{ path('ajax_cozKabul') }}",
                 type: "POST",
-                data: 'baslik='+baslik+'&metin='+metin+'&kategori='+kategori+'&onem='+onem+'&dosya='+dosya,
+                data: 'ticketid='+ticketid,
                 success: function(e){
 
-                    alert(e);
+                    alert("Çözüm Kabul Edildi...");
+                    $('#listTickets').html(e);
+                }
+            });
+        }
+
+
+        function cozReddet(ticketid)
+        {
+
+            $.ajax({
+                url: "{{ path('ajax_cozReddet') }}",
+                type: "POST",
+                data: 'ticketid='+ticketid,
+                success: function(e){
+
+                    alert("Çözüm Reddedildi...");
+                    $('#listTickets').html(e);
+                }
+            });
+        }
+
+
+        function ticketCevapGor(ticketid) {
+            $.ajax({
+                url: "{{ path('ajax_ticketCevapGor') }}",
+                type: "POST",
+                data: 'ticketid='+ticketid,
+                success: function(e){
+                    $('#ticketCevapGor').html(e);
 
                 }
             });
         }
+
     </script>
 
 {% endblock %}

@@ -1,3 +1,7 @@
+default:
+    path:     /
+    defaults: { _controller:  UserBundle:Role:index }
+
 normal_user:
     resource: "@NormalUserBundle/Resources/config/routing.yml"
     prefix:   /

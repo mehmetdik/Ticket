@@ -9,3 +9,12 @@ ticketEkle:
 ajax_ticketEkle :
     path:     /ajax-ticketEkle
     defaults: { _controller: NormalUserBundle:Ticket:ekle }
+
+ajax_cozKabul:
+    path:     /ajax-cozKabul
+    defaults: { _controller: NormalUserBundle:Ticket:cozKabul }
+
+ajax_cozReddet:
+    path:     /ajax-cozReddet
+    defaults: { _controller: NormalUserBundle:Ticket:cozRed }
+

@@ -71,7 +71,7 @@ class AdminTicketController extends Controller
 
 
 
-        return $this->render('AdminBundle:MainPage:ajaxlistele.html.twig',array('Tickets'=>$Tickets,'KategoriTickets'=>$kategoriTickets,'Yetkiler'=>$yetkiler,'Cevaplar'=>$cevaplar));
+        return $this->render('NormalUserBundle:MainPage:ajaxlistele.html.twig',array('Tickets'=>$Tickets,'KategoriTickets'=>$kategoriTickets,'Yetkiler'=>$yetkiler,'Cevaplar'=>$cevaplar));
     }
 
     public function yetkiliSecAction(Request $request)
@@ -100,8 +100,6 @@ class AdminTicketController extends Controller
 
 
         return $this->render('AdminBundle:MainPage:ajaxlistele.html.twig',array('Tickets'=>$Tickets,'KategoriTickets'=>$kategoriTickets,'Yetkiler'=>$yetkiler,'Cevaplar'=>$cevaplar));
-
-
 
     }
 
